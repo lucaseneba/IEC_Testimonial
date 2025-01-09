@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+  <title>Responsive Playable Ad</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #video-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    #background-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Maintain aspect ratio */
+    }
+    #clickable-button {
+      position: absolute;
+      background-color: rgba(255, 0, 0, 0); /* Invisible */
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="video-container">
+      <!-- Background Video -->
+      <video id="background-video" autoplay muted loop>
+        <source src="assets/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <!-- Invisible Clickable Button -->
+    <button id="clickable-button"></button>
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const backgroundVideo = document.getElementById('background-video');
+    const clickableButton = document.getElementById('clickable-button');
+
+    // Original video and button dimensions
+    const videoOriginalWidth = 1080; // Original video width
+    const videoOriginalHeight = 1920; // Original video height
+    const buttonOriginalWidth = 160; // Button collider width
+    const buttonOriginalHeight = 30; // Button collider height
+    const buttonOriginalX = (1080 / 2) - (160 / 2); // Centered horizontally
+    const buttonOriginalY = (1920 / 2) + 643; // Positioned at Y = -547
+
+    // Function to resize video and button dynamically
+    function resizeContainer() {
+      // Get the browser window size
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      // Calculate the scale to maintain aspect ratio
+      const scale = Math.min(windowWidth / videoOriginalWidth, windowHeight / videoOriginalHeight);
+
+      // Calculate the adjusted container dimensions
+      const containerWidth = videoOriginalWidth * scale;
+      const containerHeight = videoOriginalHeight * scale;
+
+      // Apply container dimensions
+      container.style.width = `${containerWidth}px`;
+      container.style.height = `${containerHeight}px`;
+
+      // Center the video
+      backgroundVideo.style.width = `${containerWidth}px`;
+      backgroundVideo.style.height = `${containerHeight}px`;
+
+      // Adjust the button size and position based on the container
+      clickableButton.style.width = `${buttonOriginalWidth * scale}px`;
+      clickableButton.style.height = `${buttonOriginalHeight * scale}px`;
+      clickableButton.style.left = `${buttonOriginalX * scale}px`;
+      clickableButton.style.top = `${buttonOriginalY * scale}px`;
+    }
+
+    // Event listeners for resizing
+    window.addEventListener('resize', resizeContainer);
+    window.addEventListener('load', resizeContainer);
+
+    // Redirect on button click
+    clickableButton.addEventListener('click', () => {
+      window.location.href = 'https://play.google.com/store/apps/details?id=com.playnearn&hl=en';
+    });
+  </script>
+</body>
+</html>
